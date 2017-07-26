@@ -10,7 +10,10 @@ class CategoryDB {
         $categories = array();
         foreach ($statement as $row) {
             $category = new Category();
-            $categories[] = $category;
+      $category->setID($row['categoryID']);
+                  $category->setName($row['categoryName']);
+
+     	$categories[] = $category;
         }
         return $categories;
     }
@@ -25,7 +28,11 @@ class CategoryDB {
         $row = $statement->fetch();
         $statement->closeCursor();    
         $category = new Category();
-        return $category;
+  $category->setID($row['categoryID']);
+          $category->setName($row['categoryName']);
+
+ 
+ return $category;
     }
 }
 ?>
