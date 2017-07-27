@@ -21,9 +21,10 @@ if ($action == 'list_products') {
     }
 
     // Get product and category data
-    $current_category = CategoryDB::getCategory($category_id);
-    $categories = CategoryDB::getCategories();
-    $products = ProductDB::getProductsByCategory($category_id);
+    $categoryDB=new CategoryDB();
+    $current_category = $categoryDB->getCategory($category_id);
+    $categories = $categoryDB->getCategories();
+    $products =(new  ProductDB())->getProductsByCategory($category_id);
 
     // Display the product list
     include('product_list.php');
@@ -35,7 +36,7 @@ if ($action == 'list_products') {
             FILTER_VALIDATE_INT);
 
     // Delete the product
-    ProductDB::deleteProduct($product_id);
+   (new  ProductDB())->deleteProduct($product_id);
 
     // Display the Product List page for the current category
     header("Location: .?category_id=$category_id");
@@ -53,9 +54,14 @@ if ($action == 'list_products') {
         $error = "Invalid product data. Check all fields and try again.";
         include('../errors/error.php');
     } else {
-        $current_category = CategoryDB::getCategory($category_id);
-        $product = new Product($current_category, $code, $name, $price);
-        ProductDB::addProduct($product);
+        $current_category =(new CategoryDB())->getCategory($category_id);
+        $product = new Product();
+	 $product->setCategory($current_category);
+	 $product->setCode($code);
+	 $product->setName($name);
+	 $product->setPrice($price);
+
+       (new  ProductDB())->addProduct($product);
 
         // Display the Product List page for the current category
         header("Location: .?category_id=$category_id");
